@@ -1,36 +1,38 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <meta charset="UTF-8">
-  <title>Voertuig Reserveringen</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+<title>Reserveringssysteem</title>
 </head>
 <body>
-  <div class="container">
-    <h1>Reservering Renault Bus / Aanhanger</h1>
+  <h1>Reserveringssysteem</h1>
 
-    <!-- Formulier -->
-    <form id="reservationForm">
-      <label>Object:</label>
-      <select name="object">
-        <option value="Renault Bus">Renault Bus</option>
-        <option value="Aanhanger">Aanhanger</option>
-      </select>
-      <label>Datum:</label>
-      <input type="date" name="date" required>
-      <label>Dagdeel:</label>
-      <select name="timeslot">
-        <option value="Ochtend">Ochtend</option>
-        <option value="Middag">Middag</option>
-      </select>
-      <label>Naam:</label>
-      <input type="text" name="name" required>
-      <button type="submit">Reserveer</button>
-    </form>
+  <form id="reservationForm">
+    <label>Object:</label>
+    <select name="object" required>
+      <option value="Renault Bus">Renault Bus</option>
+      <option value="Aanhanger">Aanhanger</option>
+    </select>
 
-    <!-- Agenda -->
-    <div id="agenda"></div>
-  </div>
+    <label>Datum:</label>
+    <input type="date" name="date" required>
+
+    <label>Tijdslot:</label>
+    <select name="timeslot" required>
+      <option value="Ochtend">Ochtend</option>
+      <option value="Middag">Middag</option>
+    </select>
+
+    <label>Naam:</label>
+    <input type="text" name="name" required>
+
+    <button type="submit">Reserveren</button>
+  </form>
+
+  <h2>Weekoverzicht</h2>
+  <div id="weekAgenda"></div>
 
   <script src="client.js"></script>
 </body>
