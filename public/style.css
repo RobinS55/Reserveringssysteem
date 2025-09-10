@@ -1,0 +1,67 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f0f0f0;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.container {
+  max-width: 600px;
+  width: 100%;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+h1 {
+  text-align: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+form input, form select, form button {
+  padding: 8px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+form button {
+  background: #4CAF50;
+  color: white;
+  cursor: pointer;
+  border: none;
+  transition: background 0.2s;
+}
+
+form button:hover {
+  background: #45a049;
+}
+
+#agenda {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.slot {
+  padding: 10px;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+}
+
+.available {
+  background: #4CAF50;
+}
+
+.booked {
+  background: #f44336;
+}
