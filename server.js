@@ -5,30 +5,23 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-// Frontend bestanden
 app.use(express.static("public"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// PostgreSQL verbinding met Supabase
 const pool = new Pool({
-  user: 'postgres',                          // standaard Supabase user
-  host: 'hzzbamequrdimpjhcqdj.supabase.co',  // jouw Project URL zonder https://
-  database: 'postgres',                      // standaard database
-  password: 'Tdv8yrSQL',                     // Database password
-  port: 5432
+  user: process.env.DB_USER || 'postgres',
+  host: process.env.DB_HOST || 'hzzbamequrdimpjhcqdj.supabase.co',
+  database: process.env.DB_NAME || 'postgres',
+  password: process.env.DB_PASSWORD || 'Tdv8yrSQL',
+  port: process.env.DB_PORT || 5432
 });
 
-// Controleer verbinding
 pool.connect((err) => {
-  if (err) {
-    console.error('Verbinding mislukt:', err);
-  } else {
-    console.log('Verbonden met Supabase database!');
-  }
+  if (err) console.error('Verbinding mislukt:', err);
+  else console.log('Verbonden met Supabase database!');
 });
 
-// Alle reserveringen ophalen
 app.get("/api/reservations", async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM reservations ORDER BY date, timeslot");
@@ -38,7 +31,6 @@ app.get("/api/reservations", async (req, res) => {
   }
 });
 
-// Nieuwe reservering toevoegen
 app.post("/api/reservations", async (req, res) => {
   const { object, date, timeslot, name } = req.body;
   try {
@@ -52,7 +44,6 @@ app.post("/api/reservations", async (req, res) => {
   }
 });
 
-// Server starten
 app.listen(PORT, () => {
   console.log(`Server draait op poort ${PORT}`);
 });
