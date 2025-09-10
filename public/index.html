@@ -1,39 +1,44 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="style.css">
-<title>Reserveringssysteem</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reserveringssysteem</title>
+  <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css' rel='stylesheet' />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <h1>Reserveringssysteem</h1>
 
-  <form id="reservationForm">
-    <label>Object:</label>
-    <select name="object" required>
-      <option value="Renault Bus">Renault Bus</option>
-      <option value="Aanhanger">Aanhanger</option>
-    </select>
+  <div id='calendar'></div>
 
-    <label>Datum:</label>
-    <input type="date" name="date" required>
+  <!-- Modal / formulier -->
+  <div id="reservationModal" class="modal">
+    <form id="reservationForm">
+      <label>Object:</label>
+      <select name="object" required>
+        <option value="Renault Bus">Renault Bus</option>
+        <option value="Aanhanger">Aanhanger</option>
+      </select>
 
-    <label>Tijdslot:</label>
-    <select name="timeslot" required>
-      <option value="Ochtend">Ochtend</option>
-      <option value="Middag">Middag</option>
-    </select>
+      <label>Datum:</label>
+      <input type="date" name="date" id="reservationDate" required>
 
-    <label>Naam:</label>
-    <input type="text" name="name" required>
+      <label>Tijdslot:</label>
+      <select name="timeslot" required>
+        <option value="Ochtend">Ochtend</option>
+        <option value="Middag">Middag</option>
+      </select>
 
-    <button type="submit">Reserveren</button>
-  </form>
+      <label>Naam:</label>
+      <input type="text" name="name" required>
 
-  <h2>Weekoverzicht</h2>
-  <div id="weekAgenda"></div>
+      <button type="submit">Reserveren</button>
+      <button type="button" id="closeModal">Annuleren</button>
+    </form>
+  </div>
 
+  <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js'></script>
   <script src="client.js"></script>
 </body>
 </html>
