@@ -2,43 +2,44 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Reserveringssysteem</title>
   <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css' rel='stylesheet' />
-  <link rel="stylesheet" href="style.css">
+  <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js'></script>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <h1>Reserveringssysteem</h1>
+  <div id="calendar"></div>
 
-  <div id='calendar'></div>
-
-  <!-- Modal / formulier -->
+  <!-- Modal Formulier -->
   <div id="reservationModal" class="modal">
-    <form id="reservationForm">
-      <label>Object:</label>
-      <select name="object" required>
-        <option value="Renault Bus">Renault Bus</option>
-        <option value="Aanhanger">Aanhanger</option>
-      </select>
+    <div class="modal-content">
+      <h2>Nieuwe reservering</h2>
+      <form id="reservationForm">
+        <label for="object">Object:</label>
+        <select id="object" name="object" required>
+          <option value="Renault Bus">Renault Bus</option>
+          <option value="Aanhanger">Aanhanger</option>
+        </select>
 
-      <label>Datum:</label>
-      <input type="date" name="date" id="reservationDate" required>
+        <label for="reservationDate">Datum:</label>
+        <input type="date" id="reservationDate" name="date" required>
 
-      <label>Tijdslot:</label>
-      <select name="timeslot" required>
-        <option value="Ochtend">Ochtend</option>
-        <option value="Middag">Middag</option>
-      </select>
+        <label for="reservationStart">Starttijd:</label>
+        <input type="time" id="reservationStart" name="start_time" required>
 
-      <label>Naam:</label>
-      <input type="text" name="name" required>
+        <label for="reservationEnd">Eindtijd:</label>
+        <input type="time" id="reservationEnd" name="end_time" required>
 
-      <button type="submit">Reserveren</button>
-      <button type="button" id="closeModal">Annuleren</button>
-    </form>
+        <label for="name">Naam:</label>
+        <input type="text" id="name" name="name" required>
+
+        <button type="submit">Opslaan</button>
+        <button type="button" id="closeModal">Annuleren</button>
+      </form>
+    </div>
   </div>
 
-  <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js'></script>
   <script src="client.js"></script>
 </body>
 </html>
