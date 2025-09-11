@@ -1,24 +1,16 @@
 const calendar = new FullCalendar.Calendar(calendarEl, {
-  initialView: 'timeGridWeek',  // start direct met weekrooster
+  initialView: 'timeGridWeek', 
   headerToolbar: {
     left: 'prev,next today',
     center: 'title',
-    right: 'dayGridMonth,timeGridWeek,timeGridDay' // knoppen: maand, week, dag
+    right: 'dayGridMonth,timeGridWeek,timeGridDay'
   },
   selectable: true,
   select: function(info) {
-    // Wordt getriggerd als je met de muis een blok selecteert
-    const startDate = info.startStr.split("T")[0];
-    reservationDateInput.value = startDate;
-
-    // Simpel tijdslot maken obv uur van selectie
-    const hour = new Date(info.start).getHours();
-    if (hour < 12) {
-      form.elements["timeslot"].value = "Ochtend";
-    } else {
-      form.elements["timeslot"].value = "Middag";
-    }
-
+    // Formulier tonen met start en eindtijd
+    document.getElementById("reservationDate").value = info.startStr.split("T")[0];
+    document.getElementById("reservationStart").value = info.start.toISOString().substring(11,16); // hh:mm
+    document.getElementById("reservationEnd").value = info.end.toISOString().substring(11,16); // hh:mm
     modal.style.display = 'block';
   },
   events: async function(fetchInfo, successCallback, failureCallback) {
@@ -27,8 +19,8 @@ const calendar = new FullCalendar.Calendar(calendarEl, {
       const reservations = await res.json();
       const events = reservations.map(r => ({
         title: `${r.object} (${r.name})`,
-        start: r.date,   // hier kun je nog uitbreiden naar uren
-        allDay: false
+        start: `${r.date}T${r.start_time}`,
+        end: `${r.date}T${r.end_time}`
       }));
       successCallback(events);
     } catch (err) {
