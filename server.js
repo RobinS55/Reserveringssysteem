@@ -3,11 +3,9 @@ const { Pool } = require("pg");
 const path = require("path");
 
 const app = express();
-
-// ✅ Render poort
 const PORT = process.env.PORT || 3000;
 
-// 🔑 Database connectie via environment variables
+// Database connectie via environment variables
 const pool = new Pool({
   user: process.env.DB_USER,
   host: process.env.DB_HOST,
@@ -17,10 +15,14 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false }
 });
 
-// Serve static files
-app.use(express.static(path.join(__dirname, "public")));
+// JSON body parsing
+app.use(express.json());
 
-// 📌 Test database connectie
+// -----------------------------
+// API Routes (boven static files!)
+// -----------------------------
+
+// Test database connectie
 app.get("/api/dbtest", async (req, res) => {
   try {
     const result = await pool.query("SELECT NOW()");
@@ -31,7 +33,7 @@ app.get("/api/dbtest", async (req, res) => {
   }
 });
 
-// 📌 Test insert
+// Test insert
 app.get("/api/testinsert", async (req, res) => {
   try {
     const result = await pool.query(
@@ -42,6 +44,16 @@ app.get("/api/testinsert", async (req, res) => {
     console.error("Test insert failed:", err);
     res.status(500).json({ success: false, error: err.message });
   }
+});
+
+// -----------------------------
+// Static files (index.html)
+// -----------------------------
+app.use(express.static(path.join(__dirname, "public")));
+
+// Catch-all voor fallback
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 // Start server
