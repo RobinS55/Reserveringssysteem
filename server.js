@@ -1,57 +1,60 @@
 const express = require("express");
-const { Pool } = require("pg");
+const { createClient } = require("@supabase/supabase-js");
 const path = require("path");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Database connectie via environment variables
-const pool = new Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
-  ssl: { rejectUnauthorized: false }
-});
-
-// JSON body parsing
 app.use(express.json());
 
 // -----------------------------
-// API Routes (boven static files!)
+// Supabase client via HTTPS
 // -----------------------------
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_ANON_KEY
+);
 
-// Test database connectie
+// -----------------------------
+// API routes
+// -----------------------------
 app.get("/api/dbtest", async (req, res) => {
   try {
-    const result = await pool.query("SELECT NOW()");
-    res.json({ success: true, server_time: result.rows[0] });
+    const { data, error } = await supabase
+      .from("reservations")
+      .select("*")
+      .limit(1);
+    if (error) throw error;
+    res.json({ success: true, sample: data[0] || null });
   } catch (err) {
-    console.error("DB connection failed:", err);
-    res.status(500).json({ success: false, error: err.message });
+    console.error("DB test failed:", err);
+    res.json({ success: false, error: err.message || JSON.stringify(err) });
   }
 });
 
-// Test insert
 app.get("/api/testinsert", async (req, res) => {
   try {
-    const result = await pool.query(
-      "INSERT INTO reservations (object, date, start_time, end_time, name) VALUES ('Renault Bus', CURRENT_DATE, '08:00', '09:00', 'Test') RETURNING *"
-    );
-    res.json({ success: true, row: result.rows[0] });
+    const { data, error } = await supabase
+      .from("reservations")
+      .insert([
+        { object: "Renault Bus", date: new Date().toISOString().slice(0,10), start_time: "08:00", end_time: "09:00", name: "Test" }
+      ])
+      .select();
+
+    if (error) throw error;
+    res.json({ success: true, row: data[0] });
   } catch (err) {
-    console.error("Test insert failed:", err);
-    res.status(500).json({ success: false, error: err.message });
+    console.error("Insert failed:", err);
+    res.json({ success: false, error: err.message || JSON.stringify(err) });
   }
 });
 
 // -----------------------------
-// Static files (index.html)
+// Static files
 // -----------------------------
 app.use(express.static(path.join(__dirname, "public")));
 
-// Catch-all voor fallback
+// Catch-all voor SPA fallback
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
