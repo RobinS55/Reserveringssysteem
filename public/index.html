@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
-  <title>Verhees Reserveringssysteem</title>
+  <title>Reserveringssysteem</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -31,15 +31,16 @@
       background: white;
       border-radius: 5px;
       box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-      max-width: 500px;
+      max-width: 600px;
       margin-left: auto;
       margin-right: auto;
       word-wrap: break-word;
+      white-space: pre-wrap;
     }
   </style>
 </head>
 <body>
-  <h1>Verhees Reserveringssysteem</h1>
+  <h1>Reserveringssysteem</h1>
 
   <div style="text-align: center;">
     <button id="testDbBtn">Test databaseconnectie</button>
@@ -51,21 +52,23 @@
   <script>
     const output = document.getElementById("output");
 
+    // Test DB connectie
     document.getElementById("testDbBtn").addEventListener("click", async () => {
       try {
         const res = await fetch('/api/dbtest');
         const data = await res.json();
-        output.innerText = JSON.stringify(data, null, 2);
+        output.innerText = "Database connectie resultaat:\n" + JSON.stringify(data, null, 2);
       } catch (err) {
         output.innerText = "Fout bij DB-test: " + err;
       }
     });
 
+    // Test insert
     document.getElementById("testInsertBtn").addEventListener("click", async () => {
       try {
         const res = await fetch('/api/testinsert');
         const data = await res.json();
-        output.innerText = JSON.stringify(data, null, 2);
+        output.innerText = "Test insert resultaat:\n" + JSON.stringify(data, null, 2);
       } catch (err) {
         output.innerText = "Fout bij test-insert: " + err;
       }
