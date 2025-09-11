@@ -5,23 +5,23 @@ const path = require("path");
 
 const app = express();
 
-// ✅ Render bepaalt de poort via environment variable
+// ✅ Render-poort
 const PORT = process.env.PORT || 3000;
 
-// 🔑 Database connectie via environment variables
+// 🔑 Database via environment variables
 const pool = new Pool({
   user: process.env.DB_USER,
   host: process.env.DB_HOST,
   database: process.env.DB_NAME,
   password: process.env.DB_PASSWORD,
   port: process.env.DB_PORT,
-  ssl: { rejectUnauthorized: false } // nodig voor Supabase
+  ssl: { rejectUnauthorized: false }
 });
 
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "public")));
 
-// 📌 Test endpoint: check databaseconnectie
+// 📌 Database test endpoint
 app.get("/api/dbtest", async (req, res) => {
   try {
     const result = await pool.query("SELECT NOW()");
@@ -46,14 +46,14 @@ app.get("/api/reservations", async (req, res) => {
 // 📌 Nieuwe reservering toevoegen
 app.post("/api/reservations", async (req, res) => {
   const { object, date, start_time, end_time, name } = req.body;
-  console.log("📥 Incoming reservation:", req.body); // laat zien wat binnenkomt
+  console.log("📥 Incoming reservation:", req.body);
 
   try {
     const result = await pool.query(
       "INSERT INTO reservations (object, date, start_time, end_time, name) VALUES ($1, $2, $3, $4, $5) RETURNING *",
       [object, date, start_time, end_time, name]
     );
-    console.log("✅ DB insert result:", result.rows[0]); // laat zien wat insert oplevert
+    console.log("✅ DB insert result:", result.rows[0]);
     res.json(result.rows[0]);
   } catch (err) {
     console.error("❌ DB insert error:", err);
@@ -61,4 +61,7 @@ app.post("/api/reservations", async (req, res) => {
   }
 });
 
-// 🔥 Ser
+// 🔥 Server starten
+app.listen(PORT, () => {
+  console.log(`✅ Server running on port ${PORT}`);
+});
