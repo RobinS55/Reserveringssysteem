@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
-  <title>Reserveringssysteem</title>
+  <title>Verhees Reserveringssysteem</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -40,7 +40,7 @@
   </style>
 </head>
 <body>
-  <h1>Reserveringssysteem</h1>
+  <h1>Verhees Reserveringssysteem</h1>
 
   <div style="text-align: center;">
     <button id="testDbBtn">Test databaseconnectie</button>
@@ -52,22 +52,28 @@
   <script>
     const output = document.getElementById("output");
 
-    // Test DB connectie
+    async function safeFetchJSON(url) {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`Server gaf status ${res.status}`);
+      const contentType = res.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        throw new Error("Geen JSON ontvangen van server");
+      }
+      return res.json();
+    }
+
     document.getElementById("testDbBtn").addEventListener("click", async () => {
       try {
-        const res = await fetch('/api/dbtest');
-        const data = await res.json();
+        const data = await safeFetchJSON("/api/dbtest");
         output.innerText = "Database connectie resultaat:\n" + JSON.stringify(data, null, 2);
       } catch (err) {
         output.innerText = "Fout bij DB-test: " + err;
       }
     });
 
-    // Test insert
     document.getElementById("testInsertBtn").addEventListener("click", async () => {
       try {
-        const res = await fetch('/api/testinsert');
-        const data = await res.json();
+        const data = await safeFetchJSON("/api/testinsert");
         output.innerText = "Test insert resultaat:\n" + JSON.stringify(data, null, 2);
       } catch (err) {
         output.innerText = "Fout bij test-insert: " + err;
